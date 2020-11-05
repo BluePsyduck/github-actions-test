@@ -69,7 +69,7 @@ class StorageFactoryTest extends TestCase
         $storage = $factory->createForCombination($combinationId);
 
         $this->assertInstanceOf(ZipArchiveStorage::class, $storage);
-        $this->assertSame($this->serializer, $this->extractProperty($storage, 'serializer'));
+        $this->assertNotSame($this->serializer, $this->extractProperty($storage, 'serializer'));
         $this->assertSame($expectedFileName, $this->extractProperty($storage, 'fileName'));
     }
 }
