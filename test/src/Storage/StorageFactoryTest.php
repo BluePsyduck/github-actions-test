@@ -63,7 +63,7 @@ class StorageFactoryTest extends TestCase
     {
         $workingDirectory = 'abc';
         $combinationId = 'def';
-        $expectedFileName = 'abc/def.zip';
+        $expectedFileName = 'foo/def.zip';
 
         $factory = new StorageFactory($this->serializer, $workingDirectory);
         $storage = $factory->createForCombination($combinationId);
