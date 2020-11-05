@@ -10,23 +10,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 7.4
           extensions: json, zip
           tools: cs2pr
+          coverage: none
+
       - name: Get composer cache directory
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
       - name: Cache composer dependencies
         uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
+
       - name: Update dependencies
         run: composer update --no-progress --no-interaction --prefer-dist --optimize-autoloader
+
       - name: Run phpcs
         run: vendor/bin/phpcs -q --report=checkstyle | cs2pr
 
@@ -36,22 +42,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 7.4
           extensions: json, zip
+          coverage: none
+
       - name: Get composer cache directory
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
       - name: Cache composer dependencies
         uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
+
       - name: Update dependencies
         run: composer update --no-progress --no-interaction --prefer-dist --optimize-autoloader
+
       - name: Run phpstan
         run: vendor/bin/phpstan analyse --no-interaction
 
@@ -67,38 +79,47 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
           extensions: json, zip
           coverage: xdebug
+
       - name: Get composer cache directory
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
       - name: Cache composer dependencies
         uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
+
       - name: Setup problem matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
       - name: Update dependencies
         id: update-dependencies
         run: composer update --no-progress --no-interaction --prefer-dist --optimize-autoloader
+
       - name: Run phpunit --testsuite unit-test
         if: ${{ always() && steps.update-dependencies.outcome == 'success' }}
         run: vendor/bin/phpunit --testsuite unit-test --coverage-clover=coverage.xml
+
       - name: Run phpunit --testsuite serializer-test
         if: ${{ always() && steps.update-dependencies.outcome == 'success' }}
         run: vendor/bin/phpunit --testsuite serializer-test
+
       - name: Upload coverage as artifacts
         if: ${{ always() && steps.update-dependencies.outcome == 'success' }}
         uses: actions/upload-artifact@v2
         with:
           name: coverage-${{ matrix.php-version }}
           path: coverage.xml
+
       - name: Upload coverage to Codecov
         if: ${{ always() && steps.update-dependencies.outcome == 'success' }}
         uses: codecov/codecov-action@v1
