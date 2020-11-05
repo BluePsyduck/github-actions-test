@@ -83,3 +83,4 @@ jobs:
         run: vendor/bin/phpunit --testsuite unit-test --coverage-clover=coverage.xml
       - name: Run phpunit --testsuite serializer-test
         run: vendor/bin/phpunit --testsuite serializer-test
+
