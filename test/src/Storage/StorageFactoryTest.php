@@ -59,8 +59,7 @@ class StorageFactoryTest extends TestCase
      * @throws ReflectionException
      * @covers ::createForCombination
      */
-    public function testCreateForCombination(): void
-    {
+    public function testCreateForCombination(): void {
         $workingDirectory = 'abc';
         $combinationId = 'def';
         $expectedFileName = 'abc/def.zip';
@@ -69,7 +68,7 @@ class StorageFactoryTest extends TestCase
         $storage = $factory->createForCombination($combinationId);
 
         $this->assertInstanceOf(ZipArchiveStorage::class, $storage);
-        $this->assertNotSame($this->serializer, $this->extractProperty($storage, 'serializer'));
+        $this->assertSame($this->serializer, $this->extractProperty($storage, 'serializer'));
         $this->assertSame($expectedFileName, $this->extractProperty($storage, 'fileName'));
     }
 }
