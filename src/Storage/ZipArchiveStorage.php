@@ -136,7 +136,8 @@ class ZipArchiveStorage implements StorageInterface
     /**
      * Loads the combination data from the storage if it has been persisted before.
      */
-    public function load(): Combination {
+    public function load(): Combination
+    {
         $result = new Combination();
 
         $serializedData = (string) $this->getZipArchive()->getFromName(self::DATA_FILENAME);

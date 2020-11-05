@@ -390,6 +390,6 @@ class ZipArchiveStorageTest extends TestCase
 
         $storage->remove();
 
-        $this->assertFalse($directory->hasChild('foo'));
+        $this->assertTrue($directory->hasChild('foo'));
     }
 }
