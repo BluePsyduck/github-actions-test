@@ -28,26 +28,30 @@ jobs:
         run: vendor/bin/phpcs -q --report=checkstyle | cs2pr
 
   type-checker:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: 7.4
-        extensions: json, zip
-    - name: Cache composer dependencies
-      uses: actions/cache@v2
-      with:
-        path: ~/.composer/cache
-        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-        restore-keys:
-          - ${{ runner.os }}-composer-
-    - name: Update dependencies
-      run: composer update --no-progress --no-interaction --prefer-dist --optimize-autoloader
-    - name: Run phpstan
-      run: vendor/bin/phpstan analyse --no-interaction
+    name: Type Checker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          extensions: json, zip
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys:
+            - ${{ runner.os }}-composer-
+      - name: Update dependencies
+        run: composer update --no-progress --no-interaction --prefer-dist --optimize-autoloader
+      - name: Run phpstan
+        run: vendor/bin/phpstan analyse --no-interaction
 
-  test:
+  tests:
+    name: Tests
     strategy:
       matrix:
         operating-system:
