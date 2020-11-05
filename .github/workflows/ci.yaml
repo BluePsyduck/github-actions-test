@@ -85,6 +85,7 @@ jobs:
       - name: Setup problem matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
       - name: Update dependencies
+        id: update-dependencies
         run: composer update --no-progress --no-interaction --prefer-dist --optimize-autoloader
       - name: Run phpunit --testsuite unit-test
         run: vendor/bin/phpunit --testsuite unit-test --coverage-clover=coverage.xml
@@ -95,6 +96,7 @@ jobs:
         with:
           name: coverage-${{ matrix.php-version }}
           path: coverage.xml
+        if: ${{ steps.update-dependencies.outcome == "success" }}
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
