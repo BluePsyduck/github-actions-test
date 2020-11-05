@@ -96,7 +96,7 @@ jobs:
         with:
           name: coverage-${{ matrix.php-version }}
           path: coverage.xml
-        if: ${{ steps.update-dependencies.outcome == "success" }}
+        if: ${{ steps.update-dependencies.outcome == 'success' }}
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
