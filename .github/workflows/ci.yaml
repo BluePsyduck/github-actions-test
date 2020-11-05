@@ -88,18 +88,19 @@ jobs:
         id: update-dependencies
         run: composer update --no-progress --no-interaction --prefer-dist --optimize-autoloader
       - name: Run phpunit --testsuite unit-test
-        run: vendor/bin/phpunit --testsuite unit-test --coverage-clover=coverage.xml
         if: ${{ always() && steps.update-dependencies.outcome == 'success' }}
+        run: vendor/bin/phpunit --testsuite unit-test --coverage-clover=~/coverage.xml
       - name: Run phpunit --testsuite serializer-test
-        run: vendor/bin/phpunit --testsuite serializer-test
         if: ${{ always() && steps.update-dependencies.outcome == 'success' }}
+        run: vendor/bin/phpunit --testsuite serializer-test
       - name: Upload coverage as artifacts
+        if: ${{ always() && steps.update-dependencies.outcome == 'success' }}
         uses: actions/upload-artifact@v2
         with:
           name: coverage-${{ matrix.php-version }}
-          path: coverage.xml
-        if: ${{ always() && steps.update-dependencies.outcome == 'success' }}
+          path: ~/coverage.xml
       - name: Upload coverage to Codecov
+        if: ${{ always() && steps.update-dependencies.outcome == 'success' }}
         uses: codecov/codecov-action@v1
         with:
-          file: coverage.xml
+          file: ~/coverage.xml
