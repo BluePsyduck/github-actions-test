@@ -92,4 +92,12 @@ jobs:
         run: vendor/bin/phpunit --testsuite unit-test --coverage-clover=coverage.xml
       - name: Run phpunit --testsuite serializer-test
         run: vendor/bin/phpunit --testsuite serializer-test
-
+      - name: Upload coverage as artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-${{ matrix.php-versions }}
+          path: coverage.xml
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: coverage.xml
