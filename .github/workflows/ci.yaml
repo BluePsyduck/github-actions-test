@@ -103,4 +103,5 @@ jobs:
         if: ${{ always() && steps.update-dependencies.outcome == 'success' }}
         uses: codecov/codecov-action@v1
         with:
+          name: coverage-${{ matrix.php-version }}
           file: coverage.xml
