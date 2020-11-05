@@ -1,16 +1,64 @@
 name: build
-on: [push, pull_request]
+on:
+  - push
+  - pull_request
 jobs:
-  build:
+
+  coding-guidelines:
+    name: Coding Guidelines
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          extensions: json, zip
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys:
+            - ${{ runner.os }}-composer-
+      - name: Update dependencies
+        run: composer update --no-progress --no-interaction --prefer-dist --optimize-autoloader
+      - name: Run phpcs
+        run: vendor/bin/phpcs -q --report=checkstyle | cs2pr
+
+  type-checker:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 7.4
+        extensions: json, zip
+    - name: Cache composer dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.composer/cache
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+        restore-keys:
+          - ${{ runner.os }}-composer-
+    - name: Update dependencies
+      run: composer update --no-progress --no-interaction --prefer-dist --optimize-autoloader
+    - name: Run phpstan
+      run: vendor/bin/phpstan analyse --no-interaction
+
+  test:
     strategy:
       matrix:
-        operating-system: [ubuntu-latest]
-        php-versions: ["7.3", "7.4"]
+        operating-system:
+          - ubuntu-latest
+        php-versions:
+          - 7.3
+          - 7.4
     runs-on: ${{ matrix.operating-system }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -18,35 +66,18 @@ jobs:
           extensions: json, zip
           tools: cs2pr
           coverage: xdebug
-
-      - name: Setup problem matchers for PHPUnit
-        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
       - name: Cache composer dependencies
         uses: actions/cache@v2
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
+          path: ~/.composer/cache
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install dependencies
-        run: composer install --no-progress --no-interaction --prefer-dist --optimize-autoloader
-
-      - name: "Test: PHPUnit unit-test"
+          restore-keys:
+            - ${{ runner.os }}-composer-
+      - name: Setup problem matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+      - name: Update dependencies
+        run: composer update --no-progress --no-interaction --prefer-dist --optimize-autoloader
+      - name: Run phpunit --testsuite unit-test
         run: vendor/bin/phpunit --testsuite unit-test --coverage-clover=coverage.xml
-
-      - name: "Test: PHPUnit serializer-test"
+      - name: Run phpunit --testsuite serializer-test
         run: vendor/bin/phpunit --testsuite serializer-test
-
-      - name: "Test: Coverage Check"
-        run: vendor/bin/coverage-check coverage.xml 100
-
-      - name: "Test: PHP Codesniffer"
-        run: vendor/bin/phpcs -q --report=checkstyle | cs2pr
-
-      - name: "Test: PHPStan"
-        run: vendor/bin/phpstan analyse --no-interaction
