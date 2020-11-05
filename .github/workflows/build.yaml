@@ -41,8 +41,10 @@ jobs:
       - name: "Test: Coverage Check"
         run: vendor/bin/coverage-check coverage.xml 100
 
-      - name: "Test: PHPCS"
-        run: vendor/bin/phpcs -np --colors
+      - name: "Test: PHP CodeSniffer"
+        uses: chekalsky/phpcs-action@v1
+        with:
+          phpcs_bin_path: "./vendor/bin/phpcs"
 
       - name: "Test: PHPStan"
         run: vendor/bin/phpstan analyse --no-interaction
