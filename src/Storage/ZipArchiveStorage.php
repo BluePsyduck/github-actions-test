@@ -143,7 +143,7 @@ class ZipArchiveStorage implements StorageInterface
         $serializedData = (string) $this->getZipArchive()->getFromName(self::DATA_FILENAME);
         if ($serializedData !== '') {
             try {
-                $result = $this->serializer->deserialize($serializedData, Combination::class, 'json');
+                $result = $this->serializer->deserialize((string) $serializedData, Combination::class, 'json');
             } catch (Exception $e) {
                 // Nothing to do.
             }
