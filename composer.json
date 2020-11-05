@@ -3,7 +3,7 @@
   "description": "The export data structure of the Factorio Item Browser.",
   "homepage": "https://github.com/factorio-item-browser/export-data",
   "type": "library",
-  "keywords": ["Factorio Item Browser", "FIB", "export", "BluePsyduck", "test"],
+  "keywords": ["Factorio Item Browser", "FIB", "export", "BluePsyduck"],
   "license": "GPL-3.0-or-later",
   "authors": [
     {
