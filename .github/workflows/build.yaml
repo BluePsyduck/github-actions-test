@@ -15,6 +15,7 @@ jobs:
         with:
           php-version: 7.4
           extensions: json, zip
+          tools: cs2pr
       - name: Cache composer dependencies
         uses: actions/cache@v2
         with:
@@ -66,7 +67,6 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: json, zip
-          tools: cs2pr
           coverage: xdebug
       - name: Cache composer dependencies
         uses: actions/cache@v2
