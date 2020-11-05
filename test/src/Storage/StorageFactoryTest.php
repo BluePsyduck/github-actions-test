@@ -59,7 +59,8 @@ class StorageFactoryTest extends TestCase
      * @throws ReflectionException
      * @covers ::createForCombination
      */
-    public function testCreateForCombination(): void {
+    public function testCreateForCombination(): void
+    {
         $workingDirectory = 'abc';
         $combinationId = 'def';
         $expectedFileName = 'abc/def.zip';
