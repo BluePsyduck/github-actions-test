@@ -50,19 +50,19 @@ class ItemTest extends TestCase
         $this->assertSame($type, $item->getType());
     }
 
-//    /**
-//     * Tests the setting and getting the name.
-//     * @covers ::getName
-//     * @covers ::setName
-//     */
-//    public function testSetAndGetName(): void
-//    {
-//        $name = 'abc';
-//        $item = new Item();
-//
-//        $this->assertSame($item, $item->setName($name));
-//        $this->assertSame($name, $item->getName());
-//    }
+    /**
+     * Tests the setting and getting the name.
+     * @covers ::getName
+     * @covers ::setName
+     */
+    public function testSetAndGetName(): void
+    {
+        $name = 'abc';
+        $item = new Item();
+
+        $this->assertSame($item, $item->setName($name));
+        $this->assertSame($name, $item->getName());
+    }
 
     /**
      * Tests setting and getting the labels.
