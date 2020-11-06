@@ -5,8 +5,7 @@
             "pattern": [
                 {
                     "regexp": "(Total code coverage is .* % which is below the accepted .*)",
-                    "message": 1,
-                    "severity": "error"
+                    "message": 1
                 }
             ]
         }
