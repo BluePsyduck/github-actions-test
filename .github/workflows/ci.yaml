@@ -99,7 +99,9 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Setup problem matchers for PHPUnit
-        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+          echo "::add-matcher::.github/problem-matcher/phpunit.json"
 
       - name: Update dependencies
         id: update-dependencies
