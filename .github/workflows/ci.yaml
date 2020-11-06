@@ -101,7 +101,7 @@ jobs:
       - name: Setup problem matchers for PHPUnit
         run: |
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
-          echo "::add-matcher::.github/problem-matcher/phpunit.json"
+          echo "::add-matcher::.github/problem-matcher/coverage-check.json"
 
       - name: Update dependencies
         id: update-dependencies
