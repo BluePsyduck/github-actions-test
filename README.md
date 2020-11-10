@@ -15,3 +15,5 @@ icon images) and reading it into the importer script.
 The data itself is saved in a single JSON file. The library puts this file into a zip archive, and adds all the rendered
 icon files to it as well, creating a single zip file as upload. All this is managed by the `ExportDataService`, which
 is the main entry point for the library.
+
+![Test Link](/releases)
